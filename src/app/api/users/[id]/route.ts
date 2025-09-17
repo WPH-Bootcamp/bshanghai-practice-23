@@ -1,13 +1,12 @@
 import { axiosClientInstance } from "@/api/axiosClientInstance";
 import { NextResponse } from "next/server";
 
-type Param = {
-  params: { id: string };
-};
-
-export async function GET(req: Request, { params }: Param) {
+export async function GET(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
-    const { id } = params;
+    const { id } = await context.params;
     const res = await axiosClientInstance.get(`/users/${id}`);
     return NextResponse.json(res.data);
   } catch (error: Error | unknown) {
